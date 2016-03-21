@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>jslib_vue_draggable</title>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.12.0/codemirror.min.css" rel="stylesheet" />
+    <style type="text/css">
+    .mv50 { margin-top: 50px; margin-bottom: 50px; }
+    .abs { position: absolute; }
+    .box { top: 0; left: 0; right: 0; bottom: 0; }
+    .fit100 { width: 100px; height: 100px; }
+    .silver { background: #eee; }
+    .dashed { border: 1px dashed black; }
+    .cursor-move { cursor: move; }
+    .og25 { box-shadow: 0 0 25px rgba(0, 0, 0, 0.75); }
+    .flex-rows-center { display: flex; flex-direction: row; align-items: center; justify-content: space-around; }
+    </style>
+</head>
+<body>
+
+<div id="app" class="container mv50" style="display: none" v-show="true">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <div @mousedown="dragdrop" :class="{og25: dragging}" :style="{top: top + 'px', left: left + 'px'}" class="abs box fit100 flex-rows-center silver dashed cursor-move">
+                {{top}},{{left}}
+            </div>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+</div>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js" type="text/javascript"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.4/bluebird.min.js" type="text/javascript"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.18/vue.min.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    (function () {
+
+        new Vue({
+            el: '#app',
+            data: {
+                dragging: false,
+                top: 0,
+                left: 0
+            },
+            methods: {
+                dragdrop: function (event) {
+                    var _this = this,
+                        startX = event.clientX,
+                        startY = event.clientY,
+                        origX = this.left,
+                        origY = this.top,
+                        listeners = {mousemove: move, mouseup: stop};
+                    this.dragging = true;
+                    jQuery(document).on(listeners);
+                    event.preventDefault();
+                    function move(event) {
+                        if (event.buttons != 1) { stop(event); return; }
+                        _this.left = origX + (event.clientX - startX);
+                        _this.top = origY + (event.clientY - startY);
+                    }
+                    function stop(event) {
+                        _this.dragging = false;
+                        jQuery(document).off(listeners);
+                    }
+                }
+            }
+        });
+
+    })();
+</script>
+
+</body>
+</html>
