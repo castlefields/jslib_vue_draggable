@@ -10,7 +10,6 @@
     <style type="text/css">
     .mv50 { margin-top: 50px; margin-bottom: 50px; }
     .abs { position: absolute; }
-    /*.box { top: 0; left: 0; right: 0; bottom: 0; }*/
     .fit100 { width: 100px; height: 100px; }
     .silver { background: #eee; }
     .dashed { border: 1px dashed black; }
@@ -25,7 +24,7 @@
     <div class="row">
         <div class="col-md-4"></div>
         <div class="col-md-4">
-            <div @mousedown="dragdrop" :class="{og25: dragging}" :style="{top: top + 'px', left: left + 'px'}" class="abs fit100 flex-rows-center silver dashed cursor-move">
+            <div @mousedown="dragdrop" :style="{top: top + 'px', left: left + 'px'}" :class="{og25: dragging}" class="abs fit100 flex-rows-center silver dashed cursor-move">
                 {{top}},{{left}}
             </div>
         </div>
@@ -40,6 +39,11 @@
 
 <script type="text/javascript">
     (function () {
+
+        function grid(x, size)
+        {
+            return Math.round(x / size)*size;
+        }
 
         new Vue({
             el: '#app',
@@ -61,8 +65,8 @@
                     event.preventDefault();
                     function move(event) {
                         if (event.buttons != 1) { stop(event); return; }
-                        _this.left = origX + (event.clientX - startX);
-                        _this.top = origY + (event.clientY - startY);
+                        _this.left = grid(origX + (event.clientX - startX), 25);
+                        _this.top = grid(origY + (event.clientY - startY), 25);
                     }
                     function stop(event) {
                         _this.dragging = false;
