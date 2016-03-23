@@ -16,6 +16,10 @@
     .cursor-move { cursor: move; }
     .og25 { box-shadow: 0 0 25px rgba(0, 0, 0, 0.75); }
     .flex-rows-center { display: flex; flex-direction: row; align-items: center; justify-content: space-around; }
+    .fit10 { width: 10px; height: 10px; }
+    .red { background: #f88; }
+    .m5n { margin: -5px; }
+    .o75 { opacity: 0.75; }
     </style>
 </head>
 <body>
@@ -24,9 +28,55 @@
     <div class="row">
         <div class="col-md-4"></div>
         <div class="col-md-4">
-            <div @mousedown="dragdrop" :style="{top: top + 'px', left: left + 'px'}" :class="{og25: dragging}" class="abs fit100 flex-rows-center silver dashed cursor-move">
-                {{top}},{{left}}
+
+            <div @mousedown="dragdrop([a.tl, a.br], [a.tl, a.br], [a], $event)" :style="{left: a.tl.x + 'px', top: a.tl.y + 'px', width: a.br.x - a.tl.x + 'px', height: a.br.y - a.tl.y + 'px'}" :class="{og25: a.dragging}" class="abs fit100 flex-rows-center silver dashed cursor-move">
+                {{a.tl.x}},{{a.tl.y}}
             </div>
+            <div @mousedown="dragdrop([a.tl], [a.tl], [a], $event)" :style="{left: a.tl.x + 'px', top: a.tl.y + 'px'}" :class="{og25: a.dragging}" class="abs m5n fit10 red o75"></div>
+            <div @mousedown="dragdrop([a.br], [a.tl], [a], $event)" :style="{left: a.br.x + 'px', top: a.tl.y + 'px'}" :class="{og25: a.dragging}" class="abs m5n fit10 red o75"></div>
+            <div @mousedown="dragdrop([a.tl], [a.br], [a], $event)" :style="{left: a.tl.x + 'px', top: a.br.y + 'px'}" :class="{og25: a.dragging}" class="abs m5n fit10 red o75"></div>
+            <div @mousedown="dragdrop([a.br], [a.br], [a], $event)" :style="{left: a.br.x + 'px', top: a.br.y + 'px'}" :class="{og25: a.dragging}" class="abs m5n fit10 red o75"></div>
+            <div @mousedown="dragdrop([], [a.tl], [a], $event)" :style="{left: (a.tl.x + a.br.x)/2 + 'px', top: a.tl.y + 'px'}" :class="{og25: a.dragging}" class="abs m5n fit10 red o75"></div>
+            <div @mousedown="dragdrop([], [a.br], [a], $event)" :style="{left: (a.tl.x + a.br.x)/2 + 'px', top: a.br.y + 'px'}" :class="{og25: a.dragging}" class="abs m5n fit10 red o75"></div>
+            <div @mousedown="dragdrop([a.tl], [], [a], $event)" :style="{left: a.tl.x + 'px', top: (a.tl.y + a.br.y)/2 + 'px'}" :class="{og25: a.dragging}" class="abs m5n fit10 red o75"></div>
+            <div @mousedown="dragdrop([a.br], [], [a], $event)" :style="{left: a.br.x + 'px', top: (a.tl.y + a.br.y)/2 + 'px'}" :class="{og25: a.dragging}" class="abs m5n fit10 red o75"></div>
+
+            <div @mousedown="dragdrop([b.tl, b.br], [b.tl, b.br], [b], $event)" :style="{left: b.tl.x + 'px', top: b.tl.y + 'px', width: b.br.x - b.tl.x + 'px', height: b.br.y - b.tl.y + 'px'}" :class="{og25: b.dragging}" class="abs fit100 flex-rows-center silver dashed cursor-move">
+                {{b.tl.x}},{{b.tl.y}}
+            </div>
+            <div @mousedown="dragdrop([b.tl], [b.tl], [b], $event)" :style="{left: b.tl.x + 'px', top: b.tl.y + 'px'}" :class="{og25: b.dragging}" class="abs m5n fit10 red o75"></div>
+            <div @mousedown="dragdrop([b.br], [b.tl], [b], $event)" :style="{left: b.br.x + 'px', top: b.tl.y + 'px'}" :class="{og25: b.dragging}" class="abs m5n fit10 red o75"></div>
+            <div @mousedown="dragdrop([b.tl], [b.br], [b], $event)" :style="{left: b.tl.x + 'px', top: b.br.y + 'px'}" :class="{og25: b.dragging}" class="abs m5n fit10 red o75"></div>
+            <div @mousedown="dragdrop([b.br], [b.br], [b], $event)" :style="{left: b.br.x + 'px', top: b.br.y + 'px'}" :class="{og25: b.dragging}" class="abs m5n fit10 red o75"></div>
+            <div @mousedown="dragdrop([], [b.tl], [b], $event)" :style="{left: (b.tl.x + b.br.x)/2 + 'px', top: b.tl.y + 'px'}" :class="{og25: b.dragging}" class="abs m5n fit10 red o75"></div>
+            <div @mousedown="dragdrop([], [b.br], [b], $event)" :style="{left: (b.tl.x + b.br.x)/2 + 'px', top: b.br.y + 'px'}" :class="{og25: b.dragging}" class="abs m5n fit10 red o75"></div>
+            <div @mousedown="dragdrop([b.tl], [], [b], $event)" :style="{left: b.tl.x + 'px', top: (b.tl.y + b.br.y)/2 + 'px'}" :class="{og25: b.dragging}" class="abs m5n fit10 red o75"></div>
+            <div @mousedown="dragdrop([b.br], [], [b], $event)" :style="{left: b.br.x + 'px', top: (b.tl.y + b.br.y)/2 + 'px'}" :class="{og25: b.dragging}" class="abs m5n fit10 red o75"></div>
+
+            <div @mousedown="dragdrop([c.tl, c.br], [c.tl, c.br], [c], $event)" :style="{left: c.tl.x + 'px', top: c.tl.y + 'px', width: c.br.x - c.tl.x + 'px', height: c.br.y - c.tl.y + 'px'}" :class="{og25: c.dragging}" class="abs fit100 flex-rows-center silver dashed cursor-move">
+                {{c.tl.x}},{{c.tl.y}}
+            </div>
+            <div @mousedown="dragdrop([c.tl], [c.tl], [c], $event)" :style="{left: c.tl.x + 'px', top: c.tl.y + 'px'}" :class="{og25: c.dragging}" class="abs m5n fit10 red o75"></div>
+            <div @mousedown="dragdrop([c.br], [c.tl], [c], $event)" :style="{left: c.br.x + 'px', top: c.tl.y + 'px'}" :class="{og25: c.dragging}" class="abs m5n fit10 red o75"></div>
+            <div @mousedown="dragdrop([c.tl], [c.br], [c], $event)" :style="{left: c.tl.x + 'px', top: c.br.y + 'px'}" :class="{og25: c.dragging}" class="abs m5n fit10 red o75"></div>
+            <div @mousedown="dragdrop([c.br], [c.br], [c], $event)" :style="{left: c.br.x + 'px', top: c.br.y + 'px'}" :class="{og25: c.dragging}" class="abs m5n fit10 red o75"></div>
+            <div @mousedown="dragdrop([], [c.tl], [c], $event)" :style="{left: (c.tl.x + c.br.x)/2 + 'px', top: c.tl.y + 'px'}" :class="{og25: c.dragging}" class="abs m5n fit10 red o75"></div>
+            <div @mousedown="dragdrop([], [c.br], [c], $event)" :style="{left: (c.tl.x + c.br.x)/2 + 'px', top: c.br.y + 'px'}" :class="{og25: c.dragging}" class="abs m5n fit10 red o75"></div>
+            <div @mousedown="dragdrop([c.tl], [], [c], $event)" :style="{left: c.tl.x + 'px', top: (c.tl.y + c.br.y)/2 + 'px'}" :class="{og25: c.dragging}" class="abs m5n fit10 red o75"></div>
+            <div @mousedown="dragdrop([c.br], [], [c], $event)" :style="{left: c.br.x + 'px', top: (c.tl.y + c.br.y)/2 + 'px'}" :class="{og25: c.dragging}" class="abs m5n fit10 red o75"></div>
+
+            <div @mousedown="dragdrop([d.tl, d.br], [d.tl, d.br], [d], $event)" :style="{left: d.tl.x + 'px', top: d.tl.y + 'px', width: d.br.x - d.tl.x + 'px', height: d.br.y - d.tl.y + 'px'}" :class="{og25: d.dragging}" class="abs fit100 flex-rows-center silver dashed cursor-move">
+                {{d.tl.x}},{{d.tl.y}}
+            </div>
+            <div @mousedown="dragdrop([d.tl], [d.tl], [d], $event)" :style="{left: d.tl.x + 'px', top: d.tl.y + 'px'}" :class="{og25: d.dragging}" class="abs m5n fit10 red o75"></div>
+            <div @mousedown="dragdrop([d.br], [d.tl], [d], $event)" :style="{left: d.br.x + 'px', top: d.tl.y + 'px'}" :class="{og25: d.dragging}" class="abs m5n fit10 red o75"></div>
+            <div @mousedown="dragdrop([d.tl], [d.br], [d], $event)" :style="{left: d.tl.x + 'px', top: d.br.y + 'px'}" :class="{og25: d.dragging}" class="abs m5n fit10 red o75"></div>
+            <div @mousedown="dragdrop([d.br], [d.br], [d], $event)" :style="{left: d.br.x + 'px', top: d.br.y + 'px'}" :class="{og25: d.dragging}" class="abs m5n fit10 red o75"></div>
+            <div @mousedown="dragdrop([], [d.tl], [d], $event)" :style="{left: (d.tl.x + d.br.x)/2 + 'px', top: d.tl.y + 'px'}" :class="{og25: d.dragging}" class="abs m5n fit10 red o75"></div>
+            <div @mousedown="dragdrop([], [d.br], [d], $event)" :style="{left: (d.tl.x + d.br.x)/2 + 'px', top: d.br.y + 'px'}" :class="{og25: d.dragging}" class="abs m5n fit10 red o75"></div>
+            <div @mousedown="dragdrop([d.tl], [], [d], $event)" :style="{left: d.tl.x + 'px', top: (d.tl.y + d.br.y)/2 + 'px'}" :class="{og25: d.dragging}" class="abs m5n fit10 red o75"></div>
+            <div @mousedown="dragdrop([d.br], [], [d], $event)" :style="{left: d.br.x + 'px', top: (d.tl.y + d.br.y)/2 + 'px'}" :class="{og25: d.dragging}" class="abs m5n fit10 red o75"></div>
+
         </div>
         <div class="col-md-4"></div>
     </div>
@@ -42,34 +92,50 @@
 
         function grid(x, size)
         {
-            return Math.round(x / size)*size;
+            return Math.round(x / size) * size;
         }
 
         new Vue({
             el: '#app',
             data: {
-                dragging: false,
-                top: 0,
-                left: 0
+                a: {
+                    dragging: false,
+                    tl: { x: 0, y: 0 },
+                    br: { x: 100, y: 100 }
+                },
+                b: {
+                    dragging: false,
+                    tl: { x: 150, y: 0 },
+                    br: { x: 250, y: 100 }
+                },
+                c: {
+                    dragging: false,
+                    tl: { x: 0, y: 150 },
+                    br: { x: 100, y: 250 }
+                },
+                d: {
+                    dragging: false,
+                    tl: { x: 150, y: 150 },
+                    br: { x: 250, y: 250 }
+                }
             },
             methods: {
-                dragdrop: function (event) {
-                    var _this = this,
-                        startX = event.clientX,
+                dragdrop: function (x, y, dragging, event) {
+                    var startX = event.clientX,
                         startY = event.clientY,
-                        origX = this.left,
-                        origY = this.top,
+                        origX = x.map(function (v) { return v.x; }),
+                        origY = y.map(function (v) { return v.y; }),
                         listeners = {mousemove: move, mouseup: stop};
-                    this.dragging = true;
+                    dragging.forEach(function (v) { v.dragging = true; });
                     jQuery(document).on(listeners);
                     event.preventDefault();
                     function move(event) {
                         if (event.buttons != 1) { stop(event); return; }
-                        _this.left = grid(origX + (event.clientX - startX), 25);
-                        _this.top = grid(origY + (event.clientY - startY), 25);
+                        x.forEach(function (v, i) { v.x = origX[i] + (event.clientX - startX); });
+                        y.forEach(function (v, i) { v.y = origY[i] + (event.clientY - startY); });
                     }
                     function stop(event) {
-                        _this.dragging = false;
+                        dragging.forEach(function (v) { v.dragging = false; });
                         jQuery(document).off(listeners);
                     }
                 }
