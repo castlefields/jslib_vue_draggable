@@ -20,6 +20,7 @@
     .red { background: #f88; }
     .m5n { margin: -5px; }
     .o75 { opacity: 0.75; }
+    .fix { position: fixed; }
     </style>
 </head>
 <body>
@@ -28,6 +29,15 @@
     <div class="row">
         <div class="col-md-4"></div>
         <div class="col-md-4">
+
+            <div @mousedown="init_dragdrop([sel.tl, sel.br], [sel.tl, sel.br], [sel.br], [sel.br], [sel], $event)"
+                 :style="{
+                    left: sel.dragging ? left(sel) : 0,
+                    top: sel.dragging ? top(sel) : 0,
+                    width: sel.dragging ? width(sel) : '100%',
+                    height: sel.dragging ? height(sel) : '100%',
+                    opacity: sel.dragging ? 1 : 0
+                 }" class="fix red"></div>
 
             <div @mousedown="dragdrop([a.tl, a.br], [a.tl, a.br], [a], $event)" :style="{left: a.tl.x + 'px', top: a.tl.y + 'px', width: a.br.x - a.tl.x + 'px', height: a.br.y - a.tl.y + 'px'}" :class="{og25: a.dragging}" class="abs fit100 flex-rows-center silver dashed cursor-move">
                 {{a.tl.x}},{{a.tl.y}}
@@ -98,6 +108,11 @@
         new Vue({
             el: '#app',
             data: {
+                sel: {
+                    dragging: false,
+                    tl: {x: 0, y: 0},
+                    br: {x: 0, y: 0}
+                },
                 a: {
                     dragging: false,
                     tl: { x: 0, y: 0 },
@@ -120,6 +135,23 @@
                 }
             },
             methods: {
+                left: function (obj) {
+                    return Math.min(obj.tl.x, obj.br.x) + 'px';
+                },
+                top: function (obj) {
+                    return Math.min(obj.tl.y, obj.br.y) + 'px';
+                },
+                width: function (obj) {
+                    return Math.abs(obj.tl.x - obj.br.x) + 'px';
+                },
+                height: function (obj) {
+                    return Math.abs(obj.tl.y - obj.br.y) + 'px';
+                },
+                init_dragdrop: function (x, y, xx, yy, dd, event) {
+                    x.forEach(function (v) { v.x = event.clientX; });
+                    y.forEach(function (v) { v.y = event.clientY; });
+                    this.dragdrop(xx, yy, dd, event);
+                },
                 dragdrop: function (x, y, dragging, event) {
                     var startX = event.clientX,
                         startY = event.clientY,
