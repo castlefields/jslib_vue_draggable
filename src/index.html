@@ -8,19 +8,43 @@
     <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
     <link href="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.12.0/codemirror.min.css" rel="stylesheet" />
     <style type="text/css">
-    .mv50 { margin-top: 50px; margin-bottom: 50px; }
+    .cbox { box-sizing: content-box; }
+
+    .rel { position: relative; }
     .abs { position: absolute; }
-    .fit100 { width: 100px; height: 100px; }
-    .silver { background: #eee; }
-    .dashed { border: 1px dashed black; }
-    .cursor-move { cursor: move; }
-    .og25 { box-shadow: 0 0 25px rgba(0, 0, 0, 0.75); }
-    .flex-rows-center { display: flex; flex-direction: row; align-items: center; justify-content: space-around; }
-    .fit10 { width: 10px; height: 10px; }
-    .red { background: #f88; }
-    .m5n { margin: -5px; }
-    .o75 { opacity: 0.75; }
     .fix { position: fixed; }
+
+    .w40 { width: 40px; }
+    .w200 { width: 200px; }
+    .h10 { height: 10px; }
+    .h20 { height: 20px; }
+    .fit10 { width: 10px; height: 10px; }
+    .fit20 { width: 20px; height: 20px; }
+    .fit100 { width: 100px; height: 100px; }
+
+    .p10 { padding: 10px; }
+    .m5n { margin: -5px; }
+    .mt5n { margin-top: -5px; }
+    .mv50 { margin-top: 50px; margin-bottom: 50px; }
+    .mg15 > * + * { margin-top: 15px; }
+
+    .cursor-move { cursor: move; }
+    .cursor-pointer { cursor: pointer; }
+
+    .red { background: #f88; }
+    .blue { background: #88f; }
+    .green { background: #8f8; }
+    .white { background: #fff; }
+    .silver { background: #eee; }
+    .color-white { color: white; }
+
+    .c { text-align: center; }
+
+    .flex-rows-center { display: flex; flex-direction: row; align-items: center; justify-content: space-around; }
+    .dashed { border: 1px dashed black; }
+    .og25 { box-shadow: 0 0 25px rgba(0, 0, 0, 0.75); }
+    .o75 { opacity: 0.75; }
+    .br { border-radius: 999px; }
     </style>
 </head>
 <body>
@@ -87,6 +111,38 @@
             <div @mousedown="dragdrop([d.tl], [], [d], $event)" :style="{left: d.tl.x + 'px', top: (d.tl.y + d.br.y)/2 + 'px'}" :class="{og25: d.dragging}" class="abs m5n fit10 red o75"></div>
             <div @mousedown="dragdrop([d.br], [], [d], $event)" :style="{left: d.br.x + 'px', top: (d.tl.y + d.br.y)/2 + 'px'}" :class="{og25: d.dragging}" class="abs m5n fit10 red o75"></div>
 
+            <div :style="{left: bg.mv.x + 'px', top: bg.mv.y + 'px'}" class="rel cbox w200 p10 white mg15 og25">
+                <div @mousedown="dragdrop([bg.mv], [bg.mv], [bg.mv], $event)"
+                    :style="{background: 'rgb(' +
+                            (Math.max(0, Math.min(200 - 40, bg.r.x))/160*255).toFixed(0) + ',' +
+                            (Math.max(0, Math.min(200 - 40, bg.g.x))/160*255).toFixed(0) + ',' +
+                            (Math.max(0, Math.min(200 - 40, bg.b.x))/160*255).toFixed(0) +
+                        ')' }" class="h20 cursor-move">
+                        {{
+                            'rgb(' +
+                                (Math.max(0, Math.min(200 - 40, bg.r.x))/160*255).toFixed(0) + ',' +
+                                (Math.max(0, Math.min(200 - 40, bg.g.x))/160*255).toFixed(0) + ',' +
+                                (Math.max(0, Math.min(200 - 40, bg.b.x))/160*255).toFixed(0) +
+                            ')'
+                        }}
+                        </div>
+                <div class="rel w200 h10 green br">
+                    <div @mousedown="dragdrop([bg.r], [], [], $event)" :style="{left: Math.max(0, Math.min(200 - 40, bg.r.x)) + 'px'}" class="abs w40 h20 blue mt5n cursor-pointer c color-white">
+                        {{ (Math.max(0, Math.min(200 - 40, bg.r.x))/160).toFixed(2) }}
+                    </div>
+                </div>
+                <div class="rel w200 h10 green br">
+                    <div @mousedown="dragdrop([bg.g], [], [], $event)" :style="{left: Math.max(0, Math.min(200 - 40, bg.g.x)) + 'px'}" class="abs w40 h20 blue mt5n cursor-pointer c color-white">
+                        {{ (Math.max(0, Math.min(200 - 40, bg.g.x))/160).toFixed(2) }}
+                    </div>
+                </div>
+                <div class="rel w200 h10 green br">
+                    <div @mousedown="dragdrop([bg.b], [], [], $event)" :style="{left: Math.max(0, Math.min(200 - 40, bg.b.x)) + 'px'}" class="abs w40 h20 blue mt5n cursor-pointer c color-white">
+                        {{ (Math.max(0, Math.min(200 - 40, bg.b.x))/160).toFixed(2) }}
+                    </div>
+                </div>
+            </div>
+
         </div>
         <div class="col-md-4"></div>
     </div>
@@ -112,6 +168,16 @@
                     dragging: false,
                     tl: {x: 0, y: 0},
                     br: {x: 0, y: 0}
+                },
+                bg: {
+                    mv: {
+                        dragging: false,
+                        x: -290,
+                        y: -20
+                    },
+                    r: {x: 80},
+                    g: {x: 80},
+                    b: {x: 200}
                 },
                 a: {
                     dragging: false,
@@ -161,6 +227,7 @@
                     dragging.forEach(function (v) { v.dragging = true; });
                     jQuery(document).on(listeners);
                     event.preventDefault();
+                    event.stopPropagation();
                     function move(event) {
                         if (event.buttons != 1) { stop(event); return; }
                         x.forEach(function (v, i) { v.x = origX[i] + (event.clientX - startX); });
