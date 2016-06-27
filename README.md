@@ -6,4 +6,4 @@
 * move
 * end
 
-dd(begin, move, end)
+dd(event, trigger = {begin, move, end})
