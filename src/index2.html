@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>jslib_vue_draggable</title>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.12.0/codemirror.min.css" rel="stylesheet" />
+</head>
+<body>
+
+<br />
+<br />
+
+<div id="app" class="container" style="display: none" v-show="true">
+    <div v-on:mousedown="dd($event, dd_sel(tmp_sel))" style="height: 800px; border: 1px solid black;">
+
+        <div v-on:mousedown="dd($event, dd_move(tmp))" v-bind:style="{top: tmp.top + 'px', left: tmp.left + 'px'}" style="width: 200px; height: 200px; background: #f88; position: relative;"></div>
+
+        <div v-bind:style="{
+            top: tmp_sel.top + 'px',
+            left: tmp_sel.left + 'px',
+            width: tmp_sel.width + 'px',
+            height: tmp_sel.height + 'px',
+            background: 'rgba(255, 255, 0, 0.5)',
+            position: 'fixed',
+            border: '1px dashed black'}" v-if="tmp_sel.active"></div>
+
+    </div>
+</div>
+
+<br />
+<br />
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js" type="text/javascript"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.4/bluebird.min.js" type="text/javascript"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.18/vue.min.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+
+    function dd(event, trigger)
+    {
+        var startX = event.clientX,
+            startY = event.clientY,
+            listeners = {mousemove: move, mouseup: end};
+        jQuery(document).on(listeners);
+        event.preventDefault();
+        event.stopPropagation();
+        trigger.begin(startX, startY, event);
+        function move(event) {
+            var dx = event.clientX - startX,
+                dy = event.clientY - startY;
+            if (event.buttons != 1) { end(event); return; }
+            trigger.move(dx, dy, event);
+        }
+        function end(event) {
+            jQuery(document).off(listeners);
+            trigger.end(event);
+        }
+    }
+
+    (function () {
+
+        new Vue({
+            el: '#app',
+            data: {
+                tmp: {
+                    top: 10,
+                    left: 10
+                },
+                tmp_sel: {
+                    active: false,
+                    top: 0,
+                    left: 0,
+                    width: 0,
+                    height: 0
+                }
+            },
+            methods: {
+                dd: dd,
+                dd_sel: function (v) {
+                    var origX,
+                        origY;
+                    return {
+                        begin: function (x, y) {
+                            v.left = origX = x;
+                            v.top = origY = y;
+                            v.width = 0;
+                            v.height = 0;
+                            v.active = true;
+                        },
+                        move: function (dx, dy) {
+                            v.left = dx < 0 ? origX + dx : origX;
+                            v.top = dy < 0 ? origY + dy : origY;
+                            v.width = Math.abs(dx);
+                            v.height = Math.abs(dy);
+                        },
+                        end: function () {
+                            v.active = false
+                        }
+                    };
+                },
+                dd_move: function (v) {
+                    var orig = {};
+                    return {
+                        begin: function () {
+                            orig.left = v.left;
+                            orig.top = v.top;
+                        },
+                        end: function () {
+                        },
+                        move: function (dx, dy) {
+                            v.left = orig.left + dx;
+                            v.top = orig.top + dy;
+                        }
+                    };
+                }
+            }
+        });
+
+    })();
+</script>
+
+</body>
+</html>
